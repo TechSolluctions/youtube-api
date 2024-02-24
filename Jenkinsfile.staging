@@ -2,9 +2,11 @@ pipeline {
     agent any
     
     stages {
-        stage ("Start") {
+        stage ("Build") {
             steps {
-                echo "Testing pipeline"
+                script {
+                    dockerapp = docker.build("api-youtube-staging", "-f ./dockerfile.staging .")
+                }
             }
         }
     }
