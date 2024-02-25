@@ -34,7 +34,7 @@ pipeline {
                 script {
                     def idImage = env.BUILD_ID
                     def containerId = sh(script: 'docker ps -q --filter "ancestor=api-youtube-staging:$idImage"', returnStdout: true).trim()
-                    sh "docker kill $containerId"
+                    sh "docker stop $containerId"
                 }
             }
         }
