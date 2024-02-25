@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-youtube-staging
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: api-youtube-staging
+  template:
+    metadata:
+      labels:
+        app: api-youtube-staging
+    spec:
+      containers:
+      - name: api-youtube-staging
+        image: techsolluctions/api-youtube-staging:latest
+        ports:
+        - containerPort: 3000
