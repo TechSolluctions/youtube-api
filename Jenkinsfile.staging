@@ -3,10 +3,10 @@ pipeline {
     
     stages {
         stage ("Docker Build") {
-            def stringValue = params.USERNAME_DOCKER
-            echo "${stringValue}"
             steps {
                 script {
+                    def stringValue = params.USERNAME_DOCKER
+                    echo "${stringValue}"
                     dockerapp = docker.build("api-youtube-staging:${env.BUILD_ID}", "-f ./dockerfile.staging .")
                 }
             }
