@@ -1,0 +1,48 @@
+pipeline {
+    agent any
+    
+    stages {
+        stage ("Authenticate Docker Hub") {
+            steps {
+                script {
+                    def username = params.USERNAME_DOCKER
+                    def password = params.PASSWORD_DOCKER
+                    sh "docker login -u ${username} -p ${password}"
+                }
+            }
+        }
+        stage ("Docker Build") {
+            steps {
+                script {
+                    dockerapp = docker.build("api-youtube-staging:${env.BUILD_ID}", "-f ./dockerfile.staging .")
+                }
+            }
+        }
+        stage ("Docker Push") {
+            steps {
+                script {
+                    def username = params.USERNAME_DOCKER
+                    sh "docker tag api-youtube-staging ${username}/api-youtube-staging:latest"
+                    sh "docker push ${username}/api-youtube-staging:latest"
+                    sh "docker tag api-youtube-staging ${username}/api-youtube-staging:${env.BUILD_ID}"
+                    sh "docker push ${username}/api-youtube-staging:${env.BUILD_ID}"
+                }
+            }
+        }
+        stage ("Stop Existing Container") {
+            steps {
+                script {
+                    def containerId = sh(script: 'docker ps --filter "publish=1010" -q', returnStdout: true).trim()
+                    sh "docker stop $containerId"
+                }
+            }
+        }
+        stage ("Deploy") {
+            steps {
+                script {
+                    sh "docker run --detach -p 1010:3000 api-youtube-staging:${env.BUILD_ID}"
+                }
+            }
+        }
+    }
+}
