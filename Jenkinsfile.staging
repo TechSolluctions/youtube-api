@@ -5,18 +5,18 @@ pipeline {
         stage ("Authenticate with Docker Hub") {
             steps {
                 withCredentials([userNamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                    sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} registry.hub.docker.com"
+                    sh "docker login -u ${USERNAME_DOCKER} -p ${PASSWORD_DOCKER} registry.hub.docker.com"
                 }
             }
         }
-        stage ("Build Image") {
+        stage ("Docker Build") {
             steps {
                 script {
                     dockerapp = docker.build("api-youtube-staging:${env.BUILD_ID}", "-f ./dockerfile.staging .")
                 }
             }
         }
-        stage ("Push Image") {
+        stage ("Docker Push") {
             steps {
                 script {
                     docker.withRegistry("https://registry.hub.docker.com", "dockerhub") {
