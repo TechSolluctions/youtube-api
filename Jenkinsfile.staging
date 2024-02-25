@@ -32,7 +32,7 @@ pipeline {
         stage ("Stop Existing Container") {
             steps {
                 script {
-                    def containerId = sh(script: 'docker ps -q --filter "ancestor=api-youtube-staging:${{env.BUILD_ID}}"', returnStdout: true).trim()
+                    def containerId = sh(script: 'docker ps -q --filter "ancestor=api-youtube-staging:34"', returnStdout: true).trim()
                     sh "docker kill $containerId"
                 }
             }
