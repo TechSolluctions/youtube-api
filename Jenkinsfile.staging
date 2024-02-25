@@ -29,5 +29,12 @@ pipeline {
                 }
             }
         }
+        stage ("Kubernets Deploy") {
+            steps {
+                script {
+                    sh "kubectl apply -f k8s/staging.yaml"
+                }
+            }
+        }
     }
 }
