@@ -21,10 +21,11 @@ pipeline {
         stage ("Docker Push") {
             steps {
                 script {
-                    docker.withRegistry("https://registry.hub.docker.com", "dockerhub") {
-                        dockerapp.push("latest")
-                        dockerapp.push("${env.BUILD_ID}")
-                    }
+                    def username = params.USERNAME_DOCKER
+                    sh "docker tag api-youtube-staging ${username}/registry.hub.docker.com/api-youtube-staging:latest"
+                    sh "docker push ${username}/registry.hub.docker.com/api-youtube-staging:latest"
+                    sh "docker tag api-youtube-staging ${username}/registry.hub.docker.com/api-youtube-staging:${env.BUILD_ID}"
+                    sh "docker push ${username}/registry.hub.docker.com/api-youtube-staging:${env.BUILD_ID}"
                 }
             }
         }
