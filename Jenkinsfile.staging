@@ -29,10 +29,10 @@ pipeline {
                 }
             }
         }
-        stage ("Kubernets Deploy") {
+        stage ("Deploy") {
             steps {
-                withKubeConfig([credentialsId: 'kubeconfig']) {
-                    sh "kubectl apply -f ./k8s/kubeconfig.yaml"
+                script {
+                    sh "docker run --detach -p 1010:3000 api-youtube-staging:${env.BUILD_ID}"
                 }
             }
         }
