@@ -2,13 +2,6 @@ pipeline {
     agent any
     
     stages {
-        stage ("Authenticate with Docker Hub") {
-            steps {
-                withCredentials([userNamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                    sh "docker login -u ${USERNAME_DOCKER} -p ${PASSWORD_DOCKER} registry.hub.docker.com"
-                }
-            }
-        }
         stage ("Docker Build") {
             steps {
                 script {
