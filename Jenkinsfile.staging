@@ -29,6 +29,13 @@ pipeline {
                 }
             }
         }
+        stage ("Stop Existing Container") {
+            steps {
+                script {
+                    sh "lsof -ti:1010 | xargs kill -9"
+                }
+            }
+        }
         stage ("Deploy") {
             steps {
                 script {
