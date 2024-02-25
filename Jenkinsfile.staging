@@ -32,7 +32,7 @@ pipeline {
         stage ("Stop Existing Container") {
             steps {
                 script {
-                    sh "lsof -ti:1010 | xargs kill -9"
+                    sh "kill -9 $(lsof -ti:1010)"
                 }
             }
         }
